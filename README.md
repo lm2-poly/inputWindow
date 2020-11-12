@@ -21,8 +21,12 @@ here is a code example of how to implement the input window for a generic projec
     photo = ['path\picture.png',100,127]                # file path, width, height. If a picture isn't needed, set to None.
     smallFields = False;                # To reduce the width of the input field, set to True.
     myWindow = inputWindow.inputWindow(title,instructions,windowWidth,fields,defaultVal,radios,photo,smallFields)            # With this instruction, the window will appear
+    
+![Input window example](/images/example.JPG)
 
-    # Values assignments
+Then, you may want to convert some values (all returned values are string type) :
+
+    # Values assignments if 
     if myWindow.values:
         [myStringVar, myIntegerVar] = myWindow.values
 
@@ -31,4 +35,10 @@ here is a code example of how to implement the input window for a generic projec
     # All values are output as string and must be converted after depending on the expected type. For example :
     myIntegerVar = int(myIntegerVar)
     
-![Input window example](/images/example.JPG)
+Similarly as the values assignments, you may also detect if the user has clicked the Ok button or Cancel :
+
+    if myWindow.values:
+        # Do something
+        
+    else:
+        print('User canceled')
