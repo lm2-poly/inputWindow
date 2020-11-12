@@ -31,4 +31,4 @@ here is a code example of how to implement the input window for a generic projec
     # All values are output as string and must be converted after depending on the expected type. For example :
     myIntegerVar = int(myIntegerVar)
     
-![Input window example](/images/examples.JPG)
+![Input window example](/images/example.JPG)
