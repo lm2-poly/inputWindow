@@ -2,7 +2,7 @@
 A simple class to instantiate an input window made with tkinter in Python.
 
 ## How to implement
-here is a code example of how to implement the window in the code :
+here is a code example of how to implement the input window for a generic project :
 
     # Import
     from inputWindow import inputWindow
