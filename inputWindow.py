@@ -45,15 +45,15 @@ import collections
 import math
 import os
 
-class inputWindow:
-    root = None         # Shortcut for tk.Tk()
-    ents = None         # Entries a textfield
-    v = None            # Variable for radio buttons
-    values = []         # List of final values
-    radioVal = ''       # Project type
-    folderPath = ''     # Folder of where this script is located
-    
+class inputWindow:   
     def __init__(self, title, instructions, width, fields, defaultVal, radios, infosImage, smallFields):
+        self.root = None         # Shortcut for tk.Tk()
+        self.ents = None         # Entries a textfield
+        self.v = None            # Variable for radio buttons
+        self.values = []         # List of final values
+        self.radioVal = ''       # Project type
+        self.folderPath = ''     # Folder of where this script is located
+    
         # Gettting the script folder path
         filePath = os.path.realpath(__file__)
         self.folderPath = filePath[0:filePath.rfind('\\')]
