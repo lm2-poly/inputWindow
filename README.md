@@ -25,9 +25,8 @@ here is a code example of how to implement the input window for a generic projec
   
 ![Input window example](/images/example.JPG)
 
-** Note for combo box : When initializing the values, the index of the item to be selected by default must be appended to the end of the choice list ! For instance :
-myChoice = ['Option 1', 'Option 2', 'Option 3', 1]
-Here, item indexed at position 2 (item : 'Option 2') will be selected by default.
+* Note for combo box *: When initializing the values, the index of the item to be selected by default must be appended to the end of the choice list ! For instance :
+myChoice = ['Option 1', 'Option 2', 'Option 3', 1]. Here, item indexed at position 1 (item : 'Option 2') will be selected by default.
 
 Then, you may want to convert some values (all returned values are string type) :
 
