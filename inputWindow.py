@@ -19,8 +19,8 @@ Example of implementation:
     title = 'Project parameters'
     instructions = 'Provide the specifc parameters for your program by filling the following fields.'
     windowWidth = 375               # Width of the window in pixels
-    fields = ['String param','Integer param']           # Number of field entries matching the variables that you want a user input for.
-    defaultVal = [myStringVar, myIntegerVar]             # Number of default values must fit the number of fields.
+    fields = ['String param','Integer param','comboBox']           # Number of field entries matching the variables that you want a user input for.
+    defaultVal = [myStringVar, myIntegerVar,['a','b',1]]             # Number of default values must fit the number of fields. For combobox, the last data is an integer representing the index of the selected item by default
     radios = ['Choose your project type :','Type 1','Type 2','Type 3']          # the first string is the radio buttons subtile. For no radio buttons, set to None
     photo = ['path\picture.png',100,127]                # file path, width, height. If a picture isn't needed, set to None.
     smallFields = False;                # To reduce the width of the input field, set to True.
@@ -28,7 +28,7 @@ Example of implementation:
     
     # Values assignments
     if myWindow.values:
-        [myStringVar, myIntegerVar] = myWindow.values
+        [myStringVar, myIntegerVar, myComboBoxChoice] = myWindow.values
     
     projectType = myWindow.radioVal
     
@@ -45,7 +45,7 @@ import collections
 import math
 import os
 
-class inputWindow:   
+class inputWindow:
     def __init__(self, title, instructions, width, fields, defaultVal, radios, infosImage, smallFields):
         self.root = None         # Shortcut for tk.Tk()
         self.ents = None         # Entries a textfield
@@ -112,8 +112,8 @@ class inputWindow:
                 
                 # Field
                 if type(defVal[idx]) is list:
-                    ent = ttk.Combobox(self.root, values = defVal[idx])
-                    ent.current(0)
+                    ent = ttk.Combobox(self.root, values = defVal[idx][0:-1])
+                    ent.current(defVal[idx][-1])
                 else:
                     ent = tk.Entry(self.root)#, width=35)
                     ent.insert(0, defVal[idx])
