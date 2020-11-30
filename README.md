@@ -31,10 +31,10 @@ Then, you may want to convert some values (all returned values are string type) 
     if myWindow.values:
         [myStringVar, myIntegerVar, myChoice] = myWindow.values
 
-    projectType = myWindow.radioVal
+        projectType = myWindow.radioVal
 
-    # All values are output as string and must be converted after depending on the expected type. For example :
-    myIntegerVar = int(myIntegerVar)
+        # All values are output as string and must be converted after depending on the expected type. For example :
+        myIntegerVar = int(myIntegerVar)
     
 Similarly as the values assignments, you may also detect if the user has clicked the Ok button or Cancel :
 
