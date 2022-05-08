@@ -44,15 +44,17 @@ from tkinter import ttk
 import collections
 import math
 import os
+import json
 
 class inputWindow:
-    def __init__(self, title, instructions, width, fields, defaultVal, radios, infosImage, smallFields):
+    def __init__(self, title, instructions, width, fields, defaultVal, infosImage=None, smallFields=False, radios=None):
         self.root = None         # Shortcut for tk.Tk()
         self.ents = None         # Entries a textfield
         self.v = None            # Variable for radio buttons
         self.values = []         # List of final values
         self.radioVal = ''       # Project type
         self.folderPath = ''     # Folder of where this script is located
+        self.fields = fields
     
         # Gettting the script folder path
         filePath = os.path.realpath(__file__)
@@ -64,7 +66,7 @@ class inputWindow:
         self.root.title(title)
         self.v = tk.IntVar()
         self.ents = self.makeform(instructions, width, fields, defaultVal, radios, infosImage, smallFields)
-        self.root.bind('<Return>', self.callback)
+        self.root.bind('<Return>', self.callback_enter)
         self.ents[next(iter(self.ents))].focus()
         
         # Adding the buttons
@@ -94,12 +96,12 @@ class inputWindow:
             img.image = photo
             img.grid(row=0, column=0)
         instr = tk.Label(self.root, text=instructions, justify='left' , anchor='w', wraplength=width-15-infosImage[1]-(30 if infosImage[0] != 0 else 0))
-        colspan = 2 if infosImage[0] != 0 else 3 if radios is None else max(2 if infosImage[0] != 0 else 3,len(radios)-(2 if infosImage[0] != 0 else 1))
+        colspan = 2 if infosImage[0] != 0 else 4 if radios is None else max(2 if infosImage[0] != 0 else 4,len(radios)-(2 if infosImage[0] != 0 else 1))
         instr.grid(row=0, column=(1 if infosImage[0] != 0 else 0), columnspan=colspan, sticky='w e', padx=10, pady=10)
         
         # Adding the fields entry
         if fields is not None:
-            colspanLab = 1 if radios is None else max(1,math.floor((len(radios)-1)/2))
+            colspanLab = 2 if radios is None else max(2,math.floor((len(radios)-1)/2))
             colspanEnt = 2 if radios is None else max(2,len(radios)-2)
             if smallFields:
                 colspanLab += 1
@@ -112,8 +114,9 @@ class inputWindow:
                 
                 # Field
                 if type(defVal[idx]) is list:
-                    ent = ttk.Combobox(self.root, values = defVal[idx][0:-1])
+                    ent = ttk.Combobox(self.root, values = defVal[idx][0:-1], state='readonly')
                     ent.current(defVal[idx][-1])
+                    #ent.bind('<<ComboboxSelected>>', self.callback_comboBox)
                 else:
                     ent = tk.Entry(self.root)#, width=35)
                     ent.insert(0, defVal[idx])
@@ -137,7 +140,7 @@ class inputWindow:
                     c.select()
         
         # Managing column's automatic width
-        nbcol = 3 if radios is None else max(3,len(radios)-1)
+        nbcol = 4 if radios is None else max(4,len(radios)-1)
         for i in range(nbcol):
             self.root.grid_columnconfigure(i, weight=1, uniform="foo")
             
@@ -155,8 +158,11 @@ class inputWindow:
         self.root.geometry('%dx%d+%d+%d' % (width, height, x, y))
        
     # Callback function of window for pressing enter
-    def callback(self,event):
+    def callback_enter(self,event):
         self.assignValues(self.ents)
+        
+    # def callback_comboBox(self,event):
+    #     self.center_window(100, 500)
         
     # Function for assigning values from the window
     def assignValues(self,e):
@@ -171,4 +177,35 @@ class inputWindow:
             e[key].delete(0, tk.END)
         e[next(iter(e))].focus() # focus the first field
         self.root.destroy()
+                        
+    def export_json(self, filename, defaultVal):
+        paramDict = dict(zip(self.fields, defaultVal))
         
+        #Writing json file
+        for p in range(len(self.values)):
+            # looping through the window values to reconstruct a valid dict for the json file
+            paramValue = self.values[p]
+            paramField = paramDict[self.fields[p]]
+            
+            # if the parameter to update is the index of a list
+            if type(paramDict[self.fields[p]]) is list:
+                
+                # if it's a list of bool, just update the index with True = 0 and False = 1
+                if paramValue == 'True':
+                    paramDict[self.fields[p]][-1] = 0
+                elif paramValue == 'False':
+                    paramDict[self.fields[p]][-1] = 1
+                # otherwise, just update the index with the right paramValue as key to the dict
+                else:
+                    try:
+                        paramValue = int(paramValue)
+                    except:
+                        paramValue = str(paramValue)  
+                    choiceIndex = paramField.index(paramValue)
+                    paramDict[self.fields[p]][-1] = choiceIndex
+            # if any other type than list, update with the corresponding type of the original dict
+            else:
+                paramDict[self.fields[p]] = type(paramField)(paramValue)
+        
+        with open(filename, 'w') as outfile:
+            json.dump(paramDict, outfile)
