@@ -1,6 +1,11 @@
 # inputWindow
 A simple class to instantiate an input window made with tkinter in Python.
 
+Author:
+* Jean-François Chauvette (main author) : chauvettejf@gmail.com
+
+Please contact me if you want to contribute.
+
 ## How to implement
 here is a code example of how to implement the input window for a generic project :
 
